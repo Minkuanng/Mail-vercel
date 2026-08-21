@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     if (!database) {
       return res.status(200).json({ 
         success: true, 
-        domains: ['vercel.app'],
+        domains: ['mail-vercel-nu.vercel.app'],
         note: 'Using default domains'
       });
     }
@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
     const domainsRef = ref(database, 'domains');
     const snapshot = await get(domainsRef);
     
-    let domains = ['vercel.app'];
+    let domains = ['mail-vercel-nu.vercel.app'];
     if (snapshot.exists()) {
       const data = snapshot.val();
       if (Array.isArray(data)) {
@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
     console.error('Error fetching domains:', error);
     res.status(200).json({ 
       success: true, 
-      domains: ['vercel.app'],
+      domains: ['mail-vercel-nu.vercel.app'],
       note: 'Error fetching from Firebase, using default'
     });
   }

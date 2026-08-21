@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Space Mail - Email Tạm Thời</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Starfield background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: #ff8c00;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(255,140,0,0.3);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(to right, rgba(255,140,0,0), rgba(255,140,0,0.8));
+            animation: shoot 4s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0) rotate(-45deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            20% {
+                transform: translateX(-500px) translateY(500px) rotate(-45deg);
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid rgba(255,140,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.8em;
+            background: linear-gradient(135deg, #ff8c00, #ff6600, #ff4400);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: #ff8c00;
+            margin-top: 10px;
+            font-size: 1.1em;
+            opacity: 0.8;
+        }
+
+        /* Main Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,140,0,0.15);
+            border-radius: 16px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,140,0,0.05), transparent);
+            pointer-events: none;
+        }
+
+        .card:hover {
+            border-color: rgba(255,140,0,0.4);
+            box-shadow: 0 0 30px rgba(255,140,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            color: #ff8c00;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .card-title .icon {
+            font-size: 1.2em;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 6px;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,140,0,0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #ff8c00;
+            box-shadow: 0 0 20px rgba(255,140,0,0.1);
+        }
+
+        .form-group input::placeholder {
+            color: #555;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .form-row .btn {
+            width: auto;
+            padding: 12px 20px;
+            white-space: nowrap;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff8c00, #ff6600);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255,140,0,0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255,140,0,0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+            border: 1px solid rgba(255,140,0,0.2);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255,140,0,0.1);
+            color: #ff8c00;
+            border-color: #ff8c00;
+        }
+
+        .btn-success {
+            background: rgba(255,140,0,0.15);
+            color: #ff8c00;
+            border: 1px solid rgba(255,140,0,0.25);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: rgba(255,140,0,0.25);
+        }
+
+        .btn-danger {
+            background: rgba(255,0,0,0.15);
+            color: #ff4444;
+            border: 1px solid rgba(255,0,0,0.2);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: rgba(255,0,0,0.25);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Messages */
+        .messages-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: rgba(255,140,0,0.3);
+            border-radius: 10px;
+        }
+
+        .message-item {
+            background: rgba(255,255,255,0.03);
+            border-left: 3px solid #ff8c00;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .message-item:hover {
+            background: rgba(255,140,0,0.05);
+            border-left-color: #ff6600;
+        }
+
+        .message-item.unread {
+            border-left-color: #ff4400;
+            background: rgba(255,140,0,0.06);
+        }
+
+        .message-item .from {
+            color: #ff8c00;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        .message-item .subject {
+            color: white;
+            margin: 6px 0;
+            font-size: 0.95em;
+        }
+
+        .message-item .date {
+            color: #666;
+            font-size: 0.75em;
+        }
+
+        .message-item .body {
+            color: #aaa;
+            font-size: 0.85em;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: none;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+        }
+
+        .message-item.expanded .body {
+            display: block;
+        }
+
+        .badge-unread {
+            display: inline-block;
+            background: #ff8c00;
+            color: #000;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 0.65em;
+            margin-left: 8px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.85em;
+            color: #888;
+            flex-wrap: wrap;
+        }
+
+        .stats span {
+            background: rgba(255,140,0,0.08);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,140,0,0.1);
+        }
+
+        .stats .unread-count {
+            color: #ff8c00;
+            border-color: rgba(255,140,0,0.3);
+        }
+
+        .stats .total-count {
+            color: #aaa;
+        }
+
+        /* Status */
+        .status {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-top: 12px;
+            display: none;
+            font-size: 0.9em;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status.success {
+            display: block;
+            background: rgba(255,140,0,0.1);
+            border: 1px solid rgba(255,140,0,0.2);
+            color: #ff8c00;
+        }
+
+        .status.error {
+            display: block;
+            background: rgba(255,0,0,0.1);
+            border: 1px solid rgba(255,0,0,0.2);
+            color: #ff4444;
+        }
+
+        .status.info {
+            display: block;
+            background: rgba(0,212,255,0.1);
+            border: 1px solid rgba(0,212,255,0.2);
+            color: #00d4ff;
+        }
+
+        /* Auto Reload */
+        .auto-reload {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: rgba(255,140,0,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255,140,0,0.1);
+            margin-bottom: 15px;
+        }
+
+        .auto-reload .status-text {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .auto-reload .status-text.active {
+            color: #ff8c00;
+        }
+
+        .toggle-reload {
+            background: none;
+            border: none;
+            color: #ff8c00;
+            cursor: pointer;
+            font-size: 1.3em;
+            padding: 0 10px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-reload:hover {
+            transform: scale(1.2);
+        }
+
+        .countdown {
+            color: #ff8c00;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Token Display */
+        .token-display {
+            background: rgba(0,0,0,0.5);
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+            word-break: break-all;
+            font-size: 0.75em;
+            color: #ff8c00;
+            border: 1px solid rgba(255,140,0,0.15);
+        }
+
+        .token-display .label {
+            color: #666;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.8em;
+        }
+
+        .token-display .token-value {
+            font-family: 'Courier New', monospace;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 6px;
+            display: block;
+            margin: 5px 0;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            z-index: 1000;
+            animation: slideIn 0.5s ease;
+            max-width: 400px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            border: 1px solid;
+        }
+
+        .toast.success {
+            background: rgba(255,140,0,0.15);
+            border-color: rgba(255,140,0,0.3);
+            color: #ff8c00;
+        }
+
+        .toast.error {
+            background: rgba(255,0,0,0.15);
+            border-color: rgba(255,0,0,0.3);
+            color: #ff4444;
+        }
+
+        .toast.info {
+            background: rgba(0,212,255,0.1);
+            border-color: rgba(0,212,255,0.2);
+            color: #00d4ff;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.fade-out {
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            background: rgba(255,140,0,0.2);
+            color: #ff8c00;
+            margin: 0 4px;
+            border: 1px solid rgba(255,140,0,0.1);
+        }
+
+        .badge-white {
+            background: rgba(255,255,255,0.05);
+            color: #888;
+            border-color: rgba(255,255,255,0.05);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #555;
+            border-top: 1px solid rgba(255,140,0,0.1);
+            margin-top: 30px;
+            font-size: 0.85em;
+        }
+
+        .footer a {
+            color: #ff8c00;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top: 2px solid #ff8c00;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading .spinner {
+            display: block;
+        }
+
+        .loading .btn-text {
+            display: none;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+        }
+
+        .empty-state .icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+
+        .empty-state p {
+            font-size: 0.9em;
+        }
+
+        /* Domain badge */
+        .domain-badge {
+            display: inline-block;
+            background: rgba(255,140,0,0.1);
+            padding: 2px 12px;
+            border-radius: 12px;
+            color: #ff8c00;
+            font-size: 0.8em;
+            border: 1px solid rgba(255,140,0,0.15);
+        }
+
+        /* Quick actions */
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .quick-actions .btn {
+            padding: 6px 14px;
+            font-size: 0.75em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .container { padding: 10px; }
+            .card { padding: 18px; }
+            .btn { padding: 10px 16px; font-size: 0.9em; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-row .btn { width: 100%; }
+        }
+
+        /* Scrollbar style */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.02);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,140,0,0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,140,0,0.5);
+        }
+
+        /* Notification dot */
+        .notif-dot {
+            display: none;
+            width: 8px;
+            height: 8px;
+            background: #ff4400;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+            margin-left: 6px;
+        }
+
+        .notif-dot.active {
+            display: inline-block;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="shooting-star" style="top: 15%; left: 75%; animation-delay: 1.5s;"></div>
+    <div class="shooting-star" style="top: 55%; left: 65%; animation-delay: 4s;"></div>
+    <div class="shooting-star" style="top: 35%; left: 85%; animation-delay: 6.5s;"></div>
+    <div class="shooting-star" style="top: 70%; left: 80%; animation-delay: 9s;"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">🚀</div>
+            <h1>Space Mail</h1>
+            <p class="subtitle">📬 Email Tạm Thời - Bảo Mật & Tiện Lợi</p>
+            <div style="margin-top: 12px;">
+                <span class="badge">📧 @vercel.app</span>
+                <span class="badge">🔄 Auto Reload</span>
+                <span class="badge">🔒 Không Mật Khẩu</span>
+                <span class="badge">📨 Nhận Thư</span>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <!-- Left: Create Account -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📬</span>
+                    Tạo Email Mới
+                </div>
+                
+                <form id="createForm">
+                    <div class="form-group">
+                        <label>📧 Địa chỉ email</label>
+                        <div class="form-row">
+                            <input 
+                                type="text" 
+                                id="emailInput" 
+                                placeholder="username"
+                                required
+                            >
+                            <span class="domain-badge">@vercel.app</span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <label>🔑 Mật khẩu</label>
+                        <input 
+                            type="password" 
+                            id="passwordInput" 
+                            value="auto123"
+                        >
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <button type="button" onclick="generateRandomEmail()" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.75em;">
+                            🎲 Ngẫu nhiên
+                        </button>
+                        <button type="button" onclick="document.getElementById('emailInput').value = ''" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.75em;">
+                            ✏️ Xóa
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full" id="createBtn" style="margin-top: 12px;">
+                        <span class="btn-text">🚀 Tạo Email</span>
+                        <div class="spinner"></div>
+                    </button>
+                </form>
+
+                <div id="createStatus" class="status"></div>
+
+                <div id="tokenDisplay" class="token-display" style="display: none;">
+                    <span class="label">🔑 Token của bạn:</span>
+                    <span class="token-value" id="tokenValue"></span>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <button onclick="copyToken()" class="btn btn-secondary" style="padding: 5px 15px; width: auto; font-size: 0.75em;">
+                            📋 Copy
+                        </button>
+                        <button onclick="document.getElementById('tokenDisplay').style.display = 'none'" class="btn btn-secondary" style="padding: 5px 15px; width: auto; font-size: 0.75em;">
+                            ✖️ Ẩn
+                        </button>
+                    </div>
+                </div>
+
+                <div id="currentAccount" style="display: none; margin-top: 12px; padding: 10px; background: rgba(255,140,0,0.05); border-radius: 8px; border: 1px solid rgba(255,140,0,0.1);">
+                    <span style="color: #888; font-size: 0.8em;">✅ Đang dùng:</span>
+                    <span id="currentEmailDisplay" style="color: #ff8c00; font-weight: bold;"></span>
+                </div>
+            </div>
+
+            <!-- Right: Inbox -->
+            <div class="card">
+                <div class="card-title">
+                    <span class="icon">📨</span>
+                    Hòm Thư
+                    <span class="notif-dot" id="notifDot"></span>
+                </div>
+                
+                <form id="loginForm" style="display: none;" id="loginForm">
+                    <div class="form-group">
+                        <label>📧 Email</label>
+                        <input 
+                            type="text" 
+                            id="loginEmail" 
+                            placeholder="username@vercel.app"
+                        >
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <input 
+                            type="password" 
+                            id="loginPassword" 
+                            value="auto123"
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
+                        <span class="btn-text">🔓 Đăng Nhập</span>
+                        <div class="spinner"></div>
+                    </button>
+                </form>
+
+                <div id="loginStatus" class="status"></div>
+
+                <div id="messagesSection" style="display: none; margin-top: 15px;">
+                    <!-- Auto reload control -->
+                    <div class="auto-reload">
+                        <span class="status-text" id="reloadStatus">
+                            🔄 Auto: <span class="countdown" id="countdown">10</span>s
+                        </span>
+                        <div>
+                            <button class="toggle-reload" id="toggleReload" title="Bật/Tắt auto reload">⏸️</button>
+                            <button onclick="refreshMessages()" class="toggle-reload" title="Làm mới" style="font-size: 1em;">🔄</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div id="statsContainer"></div>
+                    
+                    <!-- Messages -->
+                    <div class="messages-container" id="messagesContainer">
+                        <div class="empty-state">
+                            <div class="icon">📭</div>
+                            <p>Chưa có email nào</p>
+                            <p style="font-size: 0.8em; margin-top: 5px; color: #444;">Email mới sẽ xuất hiện tại đây</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="btn-group">
+                        <button onclick="refreshMessages()" class="btn btn-secondary">
+                            🔄 Làm mới
+                        </button>
+                        <button onclick="sendTestEmail()" class="btn btn-success" id="testEmailBtn">
+                            📧 Gửi Test
+                        </button>
+                        <button onclick="clearAllMessages()" class="btn btn-danger" id="clearBtn">
+                            🗑️ Xóa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick login hint -->
+                <div id="loginHint" style="margin-top: 15px; padding: 12px; background: rgba(255,140,0,0.05); border-radius: 8px; border: 1px solid rgba(255,140,0,0.1); text-align: center;">
+                    <span style="color: #666; font-size: 0.85em;">💡 Tạo email ở bên trái để tự động đăng nhập</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card" style="margin-top: 25px;">
+            <div class="card-title">
+                <span class="icon">📊</span>
+                Thông Tin
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                <div style="background: rgba(255,140,0,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,140,0,0.1);">
+                    <div style="color: #666; font-size: 0.8em;">📬 Tổng email</div>
+                    <div style="color: #ff8c00; font-size: 1.5em; font-weight: bold;" id="totalEmails">0</div>
+                </div>
+                <div style="background: rgba(255,140,0,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,140,0,0.1);">
+                    <div style="color: #666; font-size: 0.8em;">📩 Chưa đọc</div>
+                    <div style="color: #ff4400; font-size: 1.5em; font-weight: bold;" id="unreadEmails">0</div>
+                </div>
+                <div style="background: rgba(255,140,0,0.05); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,140,0,0.1);">
+                    <div style="color: #666; font-size: 0.8em;">🔑 Token</div>
+                    <div style="color: #00d4ff; font-size: 0.9em;" id="tokenStatus">Chưa có</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Info -->
+        <div class="card" style="margin-top: 25px;">
+            <div class="card-title">
+                <span class="icon">📡</span>
+                API Endpoints
+            </div>
+            <div style="font-size: 0.8em; color: #888; overflow-x: auto;">
+                <div style="display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; padding: 5px 0;">
+                    <span style="color: #00d4ff;">GET</span>
+                    <span style="color: #aaa;">/api/health</span>
+                    <span style="color: #4CAF50;">POST</span>
+                    <span style="color: #aaa;">/api/accounts</span>
+                    <span style="color: #4CAF50;">POST</span>
+                    <span style="color: #aaa;">/api/token</span>
+                    <span style="color: #00d4ff;">GET</span>
+                    <span style="color: #aaa;">/api/messages</span>
+                    <span style="color: #4CAF50;">POST</span>
+                    <span style="color: #aaa;">/api/webhook</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🚀 Powered by Firebase | Deployed on Vercel</p>
+            <p style="font-size: 0.8em; margin-top: 5px;">
+                <a href="https://server-mail-nnmq.vercel.app" target="_blank">server-mail-nnmq.vercel.app</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // ============ CONFIG ============
+        // Tu dong dung domain hien tai cua trang (khong con hardcode server-mail-nnmq.vercel.app nua).
+        // Deploy o dau, API_BASE se tro ve do.
+        const API_BASE = window.location.origin + '/api';
+        // Domain dung de tao dia chi email. QUAN TRONG: ban KHONG THE nhan thu that o
+        // "@vercel.app" hay bat ky domain nao ban khong so huu DNS. Sau khi mua domain rieng
+        // va cau hinh MX + webhook (xem huong dan), doi gia tri nay thanh domain cua ban,
+        // vi du: 'mail.tenmiencuaban.com'
+        const MAIL_DOMAIN = 'vercel.app'; // TODO: doi thanh domain that cua ban
+        let currentToken = null;
+        let currentEmail = null;
+        let autoReloadInterval = null;
+        let countdownInterval = null;
+        let countdown = 10;
+        let isAutoReload = true;
+        let lastMessageCount = 0;
+        let messagesCache = [];
+
+        // ============ STARS ============
+        function createStars() {
+            const container = document.getElementById('stars');
+            const count = 250;
+            
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--duration', (Math.random() * 4 + 2) + 's');
+                star.style.animationDelay = Math.random() * 6 + 's';
+                container.appendChild(star);
+            }
+        }
+        createStars();
+
+        // ============ UTILITY ============
+        function showStatus(element, message, type = 'info') {
+            element.className = `status ${type}`;
+            element.textContent = message;
+        }
+
+        function hideStatus(element) {
+            element.className = 'status';
+            element.textContent = '';
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        function setLoading(button, loading) {
+            if (loading) {
+                button.classList.add('loading');
+                button.disabled = true;
+            } else {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }
+        }
+
+        function copyToken() {
+            const token = document.getElementById('tokenValue').textContent;
+            if (token) {
+                navigator.clipboard.writeText(token).then(() => {
+                    showToast('✅ Token đã copy!', 'success');
+                }).catch(() => {
+                    const input = document.createElement('input');
+                    input.value = token;
+                    document.body.appendChild(input);
+                    input.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(input);
+                    showToast('✅ Token đã copy!', 'success');
+                });
+            }
+        }
+
+        function generateRandomEmail() {
+            const username = 'user' + Math.floor(Math.random() * 100000);
+            document.getElementById('emailInput').value = username;
+            showToast('🎲 Đã tạo username ngẫu nhiên!', 'info');
+        }
+
+        function playNotificationSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                osc.type = 'sine';
+                gain.gain.value = 0.1;
+                osc.start();
+                setTimeout(() => {
+                    osc.frequency.value = 1000;
+                    setTimeout(() => {
+                        osc.stop();
+                        ctx.close();
+                    }, 100);
+                }, 100);
+            } catch (e) {}
+        }
+
+        // ============ API CALLS ============
+        async function createAccount(email, password) {
+            const response = await fetch(`${API_BASE}/accounts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: email, password })
+            });
+            return await response.json();
+        }
+
+        async function getToken(email, password) {
+            const response = await fetch(`${API_BASE}/token`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ address: email, password })
+            });
+            return await response.json();
+        }
+
+        async function getMessages(token) {
+            const response = await fetch(`${API_BASE}/messages`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            return await response.json();
+        }
+
+        async function sendTestEmailToAPI(to) {
+            const response = await fetch(`${API_BASE}/webhook`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    to: to,
+                    from: 'test@spacemail.com',
+                    subject: '📧 Test Email từ Space Mail',
+                    body: `👋 Chào bạn!\n\nĐây là email test từ Space Mail.\n⏰ Thời gian: ${new Date().toLocaleString()}\n\n🚀 Cảm ơn bạn đã sử dụng dịch vụ!`,
+                    date: new Date().toISOString()
+                })
+            });
+            return await response.json();
+        }
+
+        async function deleteAllMessages(token) {
+            const response = await fetch(`${API_BASE}/messages/clear`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            return await response.json();
+        }
+
+        // ============ CREATE ACCOUNT ============
+        document.getElementById('createForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('emailInput').value.trim();
+            const email = username + '@' + MAIL_DOMAIN;
+            const password = document.getElementById('passwordInput').value;
+            const statusEl = document.getElementById('createStatus');
+            const btn = document.getElementById('createBtn');
+
+            if (!username) {
+                showStatus(statusEl, '❌ Vui lòng nhập tên!', 'error');
+                return;
+            }
+
+            hideStatus(statusEl);
+            setLoading(btn, true);
+
+            try {
+                const result = await createAccount(email, password);
+                
+                if (result.success) {
+                    showStatus(statusEl, `✅ Tạo thành công: ${email}`, 'success');
+                    showToast(`📬 Tạo email thành công: ${email}`, 'success');
+                    
+                    const tokenResult = await getToken(email, password);
+                    if (tokenResult.success) {
+                        currentToken = tokenResult.token;
+                        currentEmail = email;
+                        document.getElementById('tokenValue').textContent = currentToken;
+                        document.getElementById('tokenDisplay').style.display = 'block';
+                        document.getElementById('currentEmailDisplay').textContent = email;
+                        document.getElementById('currentAccount').style.display = 'block';
+                        document.getElementById('loginHint').style.display = 'none';
+                        
+                        // Auto login
+                        document.getElementById('loginEmail').value = email;
+                        document.getElementById('loginForm').style.display = 'none';
+                        await loginUser(email, password);
+                    }
+                } else {
+                    showStatus(statusEl, `❌ ${result.error || 'Tạo thất bại!'}`, 'error');
+                    showToast(`❌ ${result.error || 'Tạo thất bại!'}`, 'error');
+                }
+            } catch (error) {
+                showStatus(statusEl, `❌ Lỗi: ${error.message}`, 'error');
+                showToast(`❌ Lỗi: ${error.message}`, 'error');
+            } finally {
+                setLoading(btn, false);
+            }
+        });
+
+        // ============ LOGIN ============
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            await loginUser(email, password);
+        });
+
+        async function loginUser(email, password) {
+            const statusEl = document.getElementById('loginStatus');
+            const btn = document.getElementById('loginBtn');
+
+            if (!email) {
+                showStatus(statusEl, '❌ Vui lòng nhập email!', 'error');
+                return;
+            }
+
+            hideStatus(statusEl);
+            setLoading(btn, true);
+
+            try {
+                const result = await getToken(email, password);
+                
+                if (result.success) {
+                    currentToken = result.token;
+                    currentEmail = email;
+                    showStatus(statusEl, `✅ Đăng nhập thành công: ${email}`, 'success');
+                    showToast(`🔓 Đăng nhập thành công`, 'success');
+                    
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('loginHint').style.display = 'none';
+                    document.getElementById('messagesSection').style.display = 'block';
+                    document.getElementById('currentEmailDisplay').textContent = email;
+                    document.getElementById('currentAccount').style.display = 'block';
+                    
+                    await fetchAndDisplayMessages();
+                    startAutoReload();
+                    updateStats();
+                } else {
+                    showStatus(statusEl, `❌ ${result.error || 'Đăng nhập thất bại!'}`, 'error');
+                    showToast(`❌ Đăng nhập thất bại`, 'error');
+                }
+            } catch (error) {
+                showStatus(statusEl, `❌ Lỗi: ${error.message}`, 'error');
+                showToast(`❌ Lỗi: ${error.message}`, 'error');
+            } finally {
+                setLoading(btn, false);
+            }
+        }
+
+        // ============ MESSAGES ============
+        async function fetchAndDisplayMessages() {
+            if (!currentToken) return;
+
+            try {
+                const result = await getMessages(currentToken);
+                
+                if (result.success) {
+                    const messages = result.messages || [];
+                    const newCount = messages.length;
+                    
+                    if (newCount > lastMessageCount) {
+                        playNotificationSound();
+                        showToast(`📬 Có ${newCount - lastMessageCount} email mới!`, 'info');
+                        document.getElementById('notifDot').classList.add('active');
+                        setTimeout(() => {
+                            document.getElementById('notifDot').classList.remove('active');
+                        }, 3000);
+                    }
+                    
+                    lastMessageCount = newCount;
+                    messagesCache = messages;
+                    displayMessages(messages);
+                    updateStats(messages);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function displayMessages(messages) {
+            const container = document.getElementById('messagesContainer');
+            
+            if (!messages || messages.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>Chưa có email nào</p>
+                        <p style="font-size: 0.8em; margin-top: 5px; color: #444;">Click "Gửi Test" để gửi email thử</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const unreadCount = messages.filter(m => !m.read).length;
+            
+            container.innerHTML = messages.map((msg, index) => `
+                <div class="message-item ${msg.read ? '' : 'unread'}" onclick="toggleMessage(${index})">
+                    <div class="from">📤 ${msg.from || 'Unknown'}</div>
+                    <div class="subject">
+                        📌 ${msg.subject || '(No subject)'}
+                        ${!msg.read ? '<span class="badge-unread">Mới</span>' : ''}
+                    </div>
+                    <div class="date">📅 ${new Date(msg.receivedAt || msg.date).toLocaleString()}</div>
+                    ${msg.body ? `<div class="body">${msg.body}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function toggleMessage(index) {
+            const items = document.querySelectorAll('.message-item');
+            if (items[index]) {
+                items[index].classList.toggle('expanded');
+                // Mark as read
+                if (items[index].classList.contains('unread')) {
+                    items[index].classList.remove('unread');
+                    // Update stats
+                    const messages = messagesCache;
+                    if (messages && messages[index]) {
+                        messages[index].read = true;
+                        updateStats(messages);
+                    }
+                }
+            }
+        }
+
+        function updateStats(messages) {
+            const total = messages ? messages.length : 0;
+            const unread = messages ? messages.filter(m => !m.read).length : 0;
+            
+            document.getElementById('totalEmails').textContent = total;
+            document.getElementById('unreadEmails').textContent = unread;
+            document.getElementById('tokenStatus').textContent = currentToken ? '✅ Có' : '❌ Chưa có';
+            
+            const statsContainer = document.getElementById('statsContainer');
+            if (total > 0) {
+                statsContainer.innerHTML = `
+                    <div class="stats">
+                        <span class="total-count">📬 Tổng: ${total}</span>
+                        <span class="unread-count">📩 Chưa đọc: ${unread}</span>
+                    </div>
+                `;
+            } else {
+                statsContainer.innerHTML = '';
+            }
+        }
+
+        async function refreshMessages() {
+            await fetchAndDisplayMessages();
+        }
+
+        // ============ SEND TEST EMAIL ============
+        async function sendTestEmail() {
+            if (!currentEmail) {
+                showToast('⚠️ Vui lòng đăng nhập trước!', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('testEmailBtn');
+            setLoading(btn, true);
+
+            try {
+                const result = await sendTestEmailToAPI(currentEmail);
+                if (result.success) {
+                    showToast('📧 Đã gửi email test!', 'success');
+                    setTimeout(refreshMessages, 1000);
+                } else {
+                    showToast('❌ Gửi thất bại!', 'error');
+                }
+            } catch (error) {
+                showToast(`❌ Lỗi: ${error.message}`, 'error');
+            } finally {
+                setLoading(btn, false);
+            }
+        }
+
+        // ============ CLEAR MESSAGES ============
+        async function clearAllMessages() {
+            if (!currentToken) return;
+            
+            if (!confirm('🗑️ Xóa tất cả email trong hòm thư?')) return;
+            
+            const btn = document.getElementById('clearBtn');
+            setLoading(btn, true);
+
+            try {
+                const result = await deleteAllMessages(currentToken);
+                if (result.success) {
+                    showToast('🗑️ Đã xóa tất cả!', 'success');
+                    await refreshMessages();
+                } else {
+                    showToast('❌ Xóa thất bại!', 'error');
+                }
+            } catch (error) {
+                showToast(`❌ Lỗi: ${error.message}`, 'error');
+            } finally {
+                setLoading(btn, false);
+            }
+        }
+
+        // ============ AUTO RELOAD ============
+        function startAutoReload() {
+            if (autoReloadInterval) clearInterval(autoReloadInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            isAutoReload = true;
+            countdown = 10;
+            updateReloadUI();
+            
+            countdownInterval = setInterval(() => {
+                countdown--;
+                updateReloadUI();
+                if (countdown <= 0) {
+                    countdown = 10;
+                    if (isAutoReload) refreshMessages();
+                }
+            }, 1000);
+        }
+
+        function stopAutoReload() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            isAutoReload = false;
+            updateReloadUI();
+        }
+
+        function toggleAutoReload() {
+            if (isAutoReload) {
+                stopAutoReload();
+                document.getElementById('toggleReload').textContent = '▶️';
+                showToast('⏸️ Đã tắt auto reload', 'info');
+            } else {
+                startAutoReload();
+                document.getElementById('toggleReload').textContent = '⏸️';
+                showToast('▶️ Đã bật auto reload', 'info');
+            }
+        }
+
+        function updateReloadUI() {
+            const statusText = document.getElementById('reloadStatus');
+            const countdownEl = document.getElementById('countdown');
+            
+            if (isAutoReload) {
+                statusText.className = 'status-text active';
+                countdownEl.textContent = countdown;
+            } else {
+                statusText.className = 'status-text';
+                countdownEl.textContent = '⏸️';
+            }
+        }
+
+        document.getElementById('toggleReload').addEventListener('click', toggleAutoReload);
+
+        // ============ KEYBOARD SHORTCUTS ============
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('createForm').dispatchEvent(new Event('submit'));
+            }
+            if (e.ctrlKey && e.key === 'r' && currentToken) {
+                e.preventDefault();
+                refreshMessages();
+            }
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.message-item.expanded').forEach(el => {
+                    el.classList.remove('expanded');
+                });
+            }
+        });
+
+        // ============ CHECK HEALTH ============
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                console.log('🚀 API Health:', data);
+                if (data.firebase === 'Connected') {
+                    showToast('✅ Kết nối API thành công!', 'success');
+                }
+            } catch (error) {
+                console.warn('⚠️ Cannot connect to API:', error.message);
+                showToast('⚠️ Không thể kết nối API', 'error');
+            }
+        }
+        checkHealth();
+
+        // ============ AUTO GENERATE ============
+        document.getElementById('emailInput').value = 'user' + Math.floor(Math.random() * 100000);
+
+        // ============ LOG ============
+        console.log('🚀 Space Mail loaded!');
+        console.log('📧 API:', API_BASE);
+        console.log('💡 Ctrl+Enter = Create | Ctrl+R = Refresh');
+        console.log('🎨 Theme: Orange & Dark');
+    </script>
+</body>
+</html>

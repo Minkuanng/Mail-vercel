@@ -1,0 +1,19 @@
+{
+  "name": "server-mail",
+  "version": "1.0.0",
+  "description": "Temporary email service",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
+  },
+  "dependencies": {
+    "firebase": "^9.22.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/webhook",
+      "dest": "/api/webhook.js"
+    },
+    {
+      "src": "/api/accounts",
+      "dest": "/api/accounts.js"
+    },
+    {
+      "src": "/api/token",
+      "dest": "/api/token.js"
+    },
+    {
+      "src": "/api/messages",
+      "dest": "/api/messages.js"
+    },
+    {
+      "src": "/api/domains",
+      "dest": "/api/domains.js"
+    },
+    {
+      "src": "/api/health",
+      "dest": "/api/health.js"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.html"
+    }
+  ]
+}

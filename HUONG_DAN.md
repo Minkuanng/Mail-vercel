@@ -8,7 +8,7 @@ Email hoạt động thế này: ai đó gửi thư tới `abc@domain.com` → D
 thư được chuyển tới server mail được chỉ định. App của bạn (chạy trên Vercel) **không phải** là một
 mail server, nó chỉ là web/API bình thường. Vercel không cung cấp tính năng nhận email.
 
-Code cũ hardcode domain là `@vercel.app` — nhưng bạn không sở hữu DNS của `vercel.app` nên không thể
+Code cũ hardcode domain là `@mail-vercel-nu.vercel.app` — nhưng bạn không sở hữu DNS của `mail-vercel-nu.vercel.app` nên không thể
 trỏ MX record về đâu cả → không có cách nào thư thật đến được hệ thống của bạn.
 
 `api/webhook.js` chỉ là nơi **lưu** thư vào Firebase khi có ai gọi POST tới nó — nó cần một dịch vụ
@@ -20,7 +20,7 @@ nhận mail thật sự đứng trước để gọi vào đây mỗi khi có th
 2. **`api/send.js` hardcode tài khoản Gmail giả** (`your-email@gmail.com`) → giờ đọc từ biến môi trường `SMTP_USER`, `SMTP_PASS`, `SMTP_HOST`, `SMTP_PORT`.
 3. **`api/webhook.js` không có xác thực** → bất kỳ ai cũng có thể POST giả thư vào hộp thư người khác. Đã thêm kiểm tra header `x-webhook-secret` khớp với biến môi trường `WEBHOOK_SECRET` (tùy chọn, chỉ bật khi bạn set biến này).
 4. **`firebase.js` hardcode API key trong code** → giờ ưu tiên đọc từ biến môi trường, fallback về giá trị cũ nếu chưa set (không phá vỡ khi test local).
-5. **`public/index.html`** hardcode domain deploy cũ (`server-mail-nnmq.vercel.app`) và domain email `@vercel.app` → giờ dùng `window.location.origin` (tự nhận domain hiện tại) và biến `MAIL_DOMAIN` để bạn đổi 1 chỗ duy nhất khi có domain thật.
+5. **`public/index.html`** hardcode domain deploy cũ (`mail-vercel-nu.vercel.app`) và domain email `@mail-vercel-nu.vercel.app` → giờ dùng `window.location.origin` (tự nhận domain hiện tại) và biến `MAIL_DOMAIN` để bạn đổi 1 chỗ duy nhất khi có domain thật.
 
 ## Cách để nhận được thư THẬT (bắt buộc phải làm)
 
@@ -52,7 +52,7 @@ Vào **Project Settings → Environment Variables**, thêm:
 ### Bước 4: Đổi `MAIL_DOMAIN` trong `public/index.html`
 Đổi dòng:
 ```js
-const MAIL_DOMAIN = 'vercel.app';
+const MAIL_DOMAIN = 'mail-vercel-nu.vercel.app';
 ```
 thành domain thật của bạn, ví dụ `'mail.mailcuaban.com'`.
 
